@@ -1,15 +1,14 @@
-let myLeads = [];
+let myTabs = [];
 const inputEl = document.getElementById("input-el");
 const inputBtn = document.getElementById("input-btn");
 const ulEl = document.getElementById("ul-el");
 const deleteBtn = document.getElementById("delete-btn");
-const leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"));
+const tabsFromLocalStorage = JSON.parse(localStorage.getItem("myTabs"));
 const tabBtn = document.getElementById("tab-btn");
-const deleteOneBtn = document.getElementById("delete-one-btn");
 
-if (leadsFromLocalStorage) {
-  myLeads = leadsFromLocalStorage;
-  render(myLeads);
+if (tabsFromLocalStorage) {
+  myTabs = tabsFromLocalStorage;
+  render(myTabs);
 }
 
 const tabs = [{ url: "https://www.linkedin.com/in/celeste-rhoades/" }];
@@ -19,59 +18,49 @@ tabBtn.addEventListener("click", function () {
   // })
 
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    myLeads.push(tabs[0].url);
-    localStorage.setItem("myLeads", JSON.stringify(myLeads));
-    render(myLeads);
+    myTabs.push(tabs[0].url);
+    localStorage.setItem("myTabs", JSON.stringify(myTabs));
+    render(myTabs);
   });
 });
 
-function render(leads) {
+function render(tabs) {
   let listItems = "";
-  for (let i = 0; i < leads.length; i++) {
-    listItems += `
-            <li>
-                <a target='_blank' href='${leads[i]}'>
-                    ${leads[i]}
-                </a>
-            </li>
-        `;
-  }
-  ulEl.innerHTML = listItems;
-}
-
-deleteBtn.addEventListener("dblclick", function () {
-  localStorage.clear();
-  myLeads = [];
-  render(myLeads);
-});
-
-inputBtn.addEventListener("click", function () {
-  myLeads.push(inputEl.value);
-  inputEl.value = "";
-  localStorage.setItem("myLeads", JSON.stringify(myLeads));
-  render(myLeads);
-});
-
-function render(leads) {
-  let listItems = "";
-  for (let i = 0; i < leads.length; i++) {
+  for (let i = 0; i < tabs.length; i++) {
     listItems += `
       <li>
-        <a target='_blank' href='${leads[i]}'>
-          ${leads[i]}
+        <a target='_blank' href='${tabs[i]}'>
+          ${tabs[i]}
         </a>
-        <button class="delete-single-btn" data-index="${i}">🗑️</button>
+        <button class="delete-single-btn" data-index="${i}">Delete</button>
       </li>
     `;
   }
   ulEl.innerHTML = listItems;
+
+  // Attach event listeners to the delete buttons after rendering
   const deleteButtons = document.querySelectorAll(".delete-single-btn");
   deleteButtons.forEach(btn => {
     btn.addEventListener("click", function () {
       const index = parseInt(btn.getAttribute("data-index"));
-      myLeads.splice(index, 1);
-      localStorage.setItem("myLeads", JSON.stringify(myLeads));
-      render(myLeads);
+      myTabs.splice(index, 1);
+      localStorage.setItem("myTabs", JSON.stringify(myTabs));
+      render(myTabs);
     });
   });
 }
+
+deleteBtn.addEventListener("dblclick", function () {
+  localStorage.clear();
+  myTabs = [];
+  render(myTabs);
+});
+
+inputBtn.addEventListener("click", function () {
+  if (inputEl.value.trim() !== "") {
+    myTabs.push(inputEl.value.trim());
+    inputEl.value = "";
+    localStorage.setItem("myTabs", JSON.stringify(myTabs));
+    render(myTabs);
+  }
+});

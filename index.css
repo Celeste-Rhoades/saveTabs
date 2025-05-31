@@ -34,9 +34,32 @@ ul {
 }
 
 li {
-  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* optional: space between link and button */
 }
 
 a {
   color: #04e2ff;
+}
+.delete-single-btn {
+  background: white;
+  color: hotpink;
+  border: 1px solid white;
+  border-radius: 4px; /* Add rounded corners */
+  padding: 10px 20px; /* Match other buttons */
+  font-size: 14px; /* Match other buttons */
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  display: inline-block;
+  vertical-align: middle;
+  margin: 4px;
+}
+
+.delete-single-btn:hover {
+  background: #04e2ff;
+  color: black;
+  border-color: #04e2ff;
 }
